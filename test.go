@@ -16,23 +16,24 @@ func main() {
 	var bf, bg float64
 	var cg float64
 
-	x1 := []float64{0, 0, 1, 1}
-	x2 := []float64{0, 1, 0, 1}
-	y := []float64{0, 1, 1, 0}
+	x1 := []float64{1, 2, 3, 4}
+	x2 := []float64{3, 4, 5, 6}
+	y := []float64{7, 8, 9, 10}
 
 	alpha := 0.01
 	af = 0.1
 	ag = 0.2
-	bf = 0.4
+	bf = 0
 	bg = 0.3
-	cg = 0.12
+	cg = 0
 
 	for j := 0; j < 1000; j++ {
 		for i := 0; i < 4; i++ {
-			g := Sigmoid(ag*x1[i] + bg*x2[i] + bg)
-			f := Sigmoid(af*g + bf)
+			g := ag*x1[i] + bg*x2[i] + bg
+			f := af*g + bf
 
 			e := y[i] - f
+			//e := -y[i]*math.Log(f) - (1-y[i])*math.Log(1-f)
 			se := e * e * 0.5
 			fmt.Printf("f: %f, g: %f\n", f, g)
 			fmt.Printf("Squared Error: %f\n", se)
@@ -54,8 +55,8 @@ func main() {
 		fmt.Printf("ag: %f, bg: %f, cg: %f\n", ag, bg, cg)
 
 		for k := 0; k < 4; k++ {
-			g := Sigmoid(ag*x1[k] + bg*x2[k] + bg)
-			f := Sigmoid(af*g + bf)
+			g := ag*x1[k] + bg*x2[k] + bg
+			f := af*g + bf
 			fmt.Printf("Result: %f\n\n", f)
 		}
 
