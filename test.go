@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type Any interface{}
 
@@ -15,17 +18,23 @@ func main() {
 
 	x1 := []float64{0, 0, 1, 1}
 	x2 := []float64{0, 1, 0, 1}
-	y := []float64{0, 1, 1, 1}
+	y := []float64{0, 1, 1, 0}
 
 	alpha := 0.01
+	af = 0.1
+	ag = 0.2
+	bf = 0.4
+	bg = 0.3
+	cg = 0.12
 
-	for j := 0; j < 10000; j++ {
-		for i := 0; i < len(x1); i++ {
-			g := ag*x1[i] + bg*x2[i] + cg
-			f := af*g + bf
+	for j := 0; j < 1000; j++ {
+		for i := 0; i < 4; i++ {
+			g := Sigmoid(ag*x1[i] + bg*x2[i] + bg)
+			f := Sigmoid(af*g + bf)
 
 			e := y[i] - f
 			se := e * e * 0.5
+			fmt.Printf("f: %f, g: %f\n", f, g)
 			fmt.Printf("Squared Error: %f\n", se)
 
 			Eaf := -e * g
@@ -40,12 +49,21 @@ func main() {
 			bg -= alpha * Ebg
 			cg -= alpha * Ecg
 		}
-		g := ag*0 + bg*0 + cg
-		f := af*g + bf
 
 		fmt.Printf("af: %f, bf: %f\n", af, bf)
 		fmt.Printf("ag: %f, bg: %f, cg: %f\n", ag, bg, cg)
-		fmt.Printf("Result: %f\n\n", f)
+
+		for k := 0; k < 4; k++ {
+			g := Sigmoid(ag*x1[k] + bg*x2[k] + bg)
+			f := Sigmoid(af*g + bf)
+			fmt.Printf("Result: %f\n\n", f)
+		}
+
 	}
 
+}
+
+func Sigmoid(input float64) (output float64) {
+	output = 1 / (1 + math.Exp(-input))
+	return
 }
